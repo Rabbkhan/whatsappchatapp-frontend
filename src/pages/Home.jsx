@@ -14,7 +14,7 @@ import Sidebar from "../components/Sidebar";
 import MessagePage from "../components/MessagePage";
 
 const Home = () => {
-  const user = useSelector(state => state?.user);
+  const user = useSelector((state) => state?.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
@@ -22,36 +22,33 @@ const Home = () => {
   useEffect(() => {
     const checkUserAndFetchDetails = async () => {
       const token = localStorage.getItem("token");
+      console.log("Token:", token, "User:", user);
       if (!user || !token) {
-        // console.log("User not authenticated, redirecting to /email");
+        console.log("Redirecting: no user or token");
         navigate("/email");
       } else {
         await fetchUserDetails();
       }
     };
-
     checkUserAndFetchDetails();
   }, [user]);
 
   const fetchUserDetails = async () => {
     try {
       const URL = `${import.meta.env.VITE_APP_BACKEND_URL}/api/user-details`;
+      console.log("Fetching from:", URL);
       const response = await axios.get(URL, { withCredentials: true });
-      // console.log("Fetched user details:", response.data.data);
+      console.log("Response:", response.data);
       dispatch(setUser(response.data.data));
-
       if (response.data.data.logout) {
-        // console.log("User session expired, redirecting to /email");
+        console.log("Logout flag detected");
         dispatch(logout());
         navigate("/email");
       }
     } catch (error) {
-      console.error(
-        "Error fetching user details:",
-        error.response ? error.response.data : error
-      );
+      console.error("Fetch error:", error.response?.data || error.message);
       if (error.response && error.response.status === 401) {
-        // console.log("Unauthorized, redirecting to /email");
+        console.log("Unauthorized, redirecting");
         dispatch(logout());
         navigate("/email");
       }
