@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: 'Roboto';
+  src: url('https://fonts.gstatic.com/s/roboto/v30/KFOmCnqEu92Fr1Mu4mxK.woff2') format('woff2');
+  font-display: swap;
+}
+
+body{
+
+    @apply bg-slate-200
+   
+}
+@layer{
+    .scrollbar::-webkit-scrollbar{
+        width: 10px;
+      }
+      .scrollbar::-webkit-scrollbar-track{
+        @apply bg-slate-100
+      }
+      .scrollbar::-webkit-scrollbar-thumb{
+        @apply  bg-slate-200 rounded-full
+      }
+}
+
