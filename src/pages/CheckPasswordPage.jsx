@@ -34,29 +34,32 @@ const CheckPasswordPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     e.stopPropagation();
-
     const URL = `${import.meta.env.VITE_APP_BACKEND_URL}/api/password`;
-
+    console.log("Submitting to:", URL, "Data:", {
+      userId: location?.state?._id,
+      password: data.password
+    });
     try {
       const response = await axios({
-        method :'post',
-        url : URL,
-        data : {
-          userId : location?.state?._id,
-          password : data.password
+        method: 'post',
+        url: URL,
+        data: {
+          userId: location?.state?._id,
+          password: data.password
         },
-        withCredentials : true
-      })
-
+        withCredentials: true
+      });
+      console.log("Login response:", response.data);
       toast.success(response.data.message);
-
       if (response.data.success) {
         dispatch(setToken(response?.data?.token));
         localStorage.setItem('token', response?.data?.token);
+        console.log("Token set:", response?.data?.token);
         setData({ password: "" });
         navigate('/');
       }
     } catch (error) {
+      console.error("Login error:", error.response?.data || error.message);
       toast.error(error?.response?.data?.message);
     }
   };
